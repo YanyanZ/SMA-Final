@@ -114,6 +114,9 @@ namespace Servers
      */
     std::string parse_request(std::string line);
 
+  private:
+    void update_users(void);
+
   public:
     /*!
      * \brief Start Game Server
