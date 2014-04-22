@@ -12,6 +12,7 @@
 # include <iostream>
 # include <ctime>
 # include <vector>
+# include <map>
 
 /*!
  * \brief Namespace that contains all servers
