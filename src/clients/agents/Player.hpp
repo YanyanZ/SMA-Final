@@ -37,7 +37,9 @@ namespace Servers
     ~Player(void);
 
     std::string get_action(void);
-    void action_result(std::string ret);
+    // void action_result(std::string ret);
+
+    void rcv_msg(std::string user_ip, std::string msg);
 
     int pos_x;
     int pos_y;
@@ -73,7 +75,6 @@ namespace Servers
     std::string send_msg_broadcast(std::string msg);
     std::string send_msg(std::string user_ip, std::string msg);
 
-    void rcv_msg(std::string user_ip, std::string msg);
 
     void dump_inventory(void);
   };

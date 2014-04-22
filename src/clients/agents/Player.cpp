@@ -53,6 +53,7 @@ void Player::dump_inventory(void)
     std::cout << "  " << (int)(item.first) << ":\t" << item.second << std::endl;
 }
 
+/*
 void Player::action_result(std::string ret)
 {
   // Prper parsing here
@@ -121,6 +122,7 @@ void Player::action_result(std::string ret)
 
   req_params.clear();
 }
+*/
 
 std::string Player::move(int dx, int dy)
 {
@@ -129,9 +131,9 @@ std::string Player::move(int dx, int dy)
   req = "move{";
   req += std::to_string(dx) + ";" + std::to_string(dy) + "}";
 
-  req_type = 0;
-  req_params.push_back(dx);
-  req_params.push_back(dy);
+  //req_type = 0;
+  //req_params.push_back(dx);
+  //req_params.push_back(dy);
 
   return req;
 }
@@ -143,10 +145,10 @@ std::string Player::put(char bc, int dx, int dy)
   req = "put{" + std::to_string(bc) + ";" + std::to_string(dx)
     + ";" + std::to_string(dy) + "}";
 
-  req_type = 1;
-  req_params.push_back(20/*block_code*/);
-  req_params.push_back(dx);
-  req_params.push_back(dy);
+  //req_type = 1;
+  //req_params.push_back(20/*block_code*/);
+  //req_params.push_back(dx);
+  //req_params.push_back(dy);
 
   return req;
 }
@@ -157,9 +159,9 @@ std::string Player::get(int dx, int dy)
 
   req = "get{" + std::to_string(dx) + ";" + std::to_string(dy) + "}";
 
-  req_type = 2;
-  req_params.push_back(dx);
-  req_params.push_back(dy);
+  //req_type = 2;
+  //req_params.push_back(dx);
+  //req_params.push_back(dy);
 
   return req;
 }
@@ -221,6 +223,7 @@ void Player::rcv_msg(std::string user_ip, std::string msg)
   }
   else if (std::string::npos != msg.find("buddy"))
   {
+    int i;
     if (0 <= (i = friend_index(user_ip)))
     {
       if (0 < std::rand() % 6)
@@ -232,14 +235,14 @@ void Player::rcv_msg(std::string user_ip, std::string msg)
     }
     else if (0 <= (i = contact_index(user_ip)))
     {
-      contact_index.erase(contact_index.begin() + i);
-      friend_index.push_back(user_ip);
+      contacts_ip.erase(contacts_ip.begin() + i);
+      friend_contacts_ip.push_back(user_ip);
       std::cout << "Contact " << user_ip << " is now a friend" << std::endl;
     }
     else if (0 <= (i = enemy_index(user_ip)))
     {
-      enemy_index.erase(enemy_index.begin() + i);
-      contact_index.push_back(user_ip);
+      enemy_contacts_ip.erase(enemy_contacts_ip.begin() + i);
+      contacts_ip.push_back(user_ip);
       std::cout << "Enemy " << user_ip << " is now a contact" << std::endl;
     }
   }
@@ -290,16 +293,17 @@ void Player::rcv_msg(std::string user_ip, std::string msg)
   }
   else if (std::string::npos != msg.find("nood"))
   {
+    int i;
     if (0 <= (i = friend_index(user_ip)))
     {
-      friend_index.erase(friend_index.begin() + i);
-      contact_index.push_back(user_ip);
+      friend_contacts_ip.erase(friend_contacts_ip.begin() + i);
+      contacts_ip.push_back(user_ip);
       std::cout << "Friend " << user_ip << " is now a contact" << std::endl;
     }
     else if (0 <= (i = contact_index(user_ip)))
     {
-      contact_index.erase(contact_index.begin() + i);
-      enemy_index.push_back(user_ip);
+      contacts_ip.erase(contacts_ip.begin() + i);
+      enemy_contacts_ip.push_back(user_ip);
       std::cout << "Contact " << user_ip << " is now an enemy" << std::endl;
     }
   }

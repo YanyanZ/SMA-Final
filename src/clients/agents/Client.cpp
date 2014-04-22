@@ -45,7 +45,7 @@ int Client::parse(std::string line)
   }
   else if (phrase_parse(iter, end, sg, space, send) && iter == end)
     {
-      p.rcv_message(send.sender, send.msg);
+      p.rcv_msg(send.sender, send.msg);
       // std::cout << send.msg << std::endl;
       // send.msg = "";
       // send.sender = "";
