@@ -43,6 +43,7 @@ void Game::load_accounts(std::string file)
 
 void Game::run(void)
 {
+  load_planets();
   udp::socket sock(io_service, udp::endpoint(udp::v4(), port));
   for (;;)
   {

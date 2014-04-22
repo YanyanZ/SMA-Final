@@ -12,7 +12,7 @@ int Game::parse_request(std::string& line, std::string& ip)
   std::string::const_iterator iter = line.begin();
   std::string::const_iterator end = line.end();
 
-  std::cout << "> Request: '" << line << "'";
+  std::cout << "> Request: '" << line << "'" << std::endl;
   if (phrase_parse(iter, end, cg, space, co) && iter == end)
   {
     std::cout << " DONE" << std::endl;
@@ -62,8 +62,8 @@ std::string Game::exec_request(std::string line, std::string ip, std::string por
 
     m[p->pos_x][p->pos_y].second = nullptr;
 
-    p->pos_x += mv.x;
-    p->pos_y += mv.y;
+    p->pos_x = (p->pos_x + mv.x) % 800 < 0 ? 799 : (p->pos_x + mv.x) % 800;
+    p->pos_y = (p->pos_y + mv.y) % 800 < 0 ? 799 : (p->pos_y + mv.y) % 800;
 
     m[p->pos_x][p->pos_y].second = p;
   }

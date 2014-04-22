@@ -23,11 +23,12 @@ void Game::update_users_page(void)
 
   for (std::map<std::string, Player*>::iterator it = players.begin(); it != players.end(); it++)
     {
-      buffer << "Address: " << it->first << std::endl;
-      buffer << "Username: " << it->second->user_name << std::endl;
-      buffer << "World: " << it->second->world_id << std::endl;
-      buffer << "Position: {" << it->second->pos_x << "; " << it->second->pos_y << "}" << std::endl; 
-      buffer << std::endl;
+      buffer << "\t\t\t<tr class=\"gradeA\">" << std::endl;
+      buffer << "\t\t\t<td>" << it->first << "</td>" <<std::endl;
+      buffer << "\t\t\t<td>" << it->second->user_name << "</td>" << std::endl;
+      buffer << "\t\t\t<td>" << it->second->world_id << "</td>" << std::endl;
+      buffer << "\t\t\t<td>" << it->second->pos_x << "</td>" << std::endl;
+      buffer << "\t\t\t<td>" << it->second->pos_y << "</td>" << std::endl; 
     }
 
   buffer << "\t</table>" << std::endl;

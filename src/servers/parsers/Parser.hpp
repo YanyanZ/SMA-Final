@@ -24,7 +24,6 @@ namespace Parser
   {
     int x;
     int y;
-    int z;
   };
 }
 
@@ -38,7 +37,6 @@ BOOST_FUSION_ADAPT_STRUCT(
   Parser::Move,
   (int, x)
   (int, y)
-  (int, z)
   )
 
 namespace Parser
@@ -76,7 +74,7 @@ namespace Parser
 
       start %= lit("move")
 	>> '{'
-	>> int_ >> ',' >> int_ >> ',' >> int_
+	>> int_ >> ';' >> int_
 	>> '}';
     }
 

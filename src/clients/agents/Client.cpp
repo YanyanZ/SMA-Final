@@ -51,7 +51,7 @@ void Client::run(void)
 
       std::pair<int, int> m = p.get_move();
       std::string req("move{");
-      req += std::to_string(m.first) + "," + std::to_string(m.second) + "}";
+      req += std::to_string(m.first) + ";" + std::to_string(m.second) + "}";
 
       s.send_to(boost::asio::buffer(req, req.size()), endpoint);
 
