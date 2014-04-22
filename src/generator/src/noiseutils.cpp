@@ -567,7 +567,7 @@ int WriterBMP::CalcWidthByteCount (int width) const
   return ((width * 3) + 3) & ~0x03;
 }
 
-void WriterBMP::WriteDestFile ()
+void WriterBMP::WriteDestFile (std::vector<std::vector<char> >& map)
 {
   if (m_pSourceImage == NULL) {
     throw noise::ExceptionInvalidParam ();
@@ -636,6 +636,12 @@ void WriterBMP::WriteDestFile ()
       *pDest++ = pSource->blue ;
       *pDest++ = pSource->green;
       *pDest++ = pSource->red  ;
+
+      if (pSource->blue > (pSource->green + pSource->red))
+	map[x][y] = 0;
+      else if (pSource->green > (pSource->blue + pSource->red))
+	map[x][y] = 1;
+
       ++pSource;
     }
     os.write ((char*)pLineBuffer, (size_t)bufferSize);

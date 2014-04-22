@@ -62,8 +62,8 @@ std::string Game::exec_request(std::string line, std::string ip, std::string por
 
     m[p->pos_x][p->pos_y].second = nullptr;
 
-    p->pos_x = (p->pos_x + mv.x) % 800 < 0 ? 799 : (p->pos_x + mv.x) % 800;
-    p->pos_y = (p->pos_y + mv.y) % 800 < 0 ? 799 : (p->pos_y + mv.y) % 800;
+    p->pos_x = (p->pos_x + mv.dx) % 800 < 0 ? 799 : (p->pos_x + mv.dx) % 800;
+    p->pos_y = (p->pos_y + mv.dy) % 800 < 0 ? 799 : (p->pos_y + mv.dy) % 800;
 
     m[p->pos_x][p->pos_y].second = p;
   }

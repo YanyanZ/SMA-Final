@@ -88,6 +88,7 @@ namespace Servers
    ~Game(void);
 
   private:
+    int create_planet(int i);
     /*!
      * \brief Load planets from files
      * \param files : Planete Data files

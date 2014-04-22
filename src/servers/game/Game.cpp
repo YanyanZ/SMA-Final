@@ -19,22 +19,12 @@ Game::~Game(void)
 
 void Game::load_planets(void)
 {
+  std::cout << "Start univers generation" << std::endl;
   for (int nb_p = 0; nb_p < 1; ++nb_p)
   {
-    Matrix tmp_mx;
-
-    for (int i = 0; i < 800; ++i)
-    {
-      std::vector<std::pair<uchar, Player*> > tmp_i;
-
-      for (int j = 0; j < 800; ++j)
-        tmp_i.push_back(std::make_pair<uchar, Player*>(0, nullptr));
-
-      tmp_mx.push_back(tmp_i);
-    }
-
-    univers.push_back(tmp_mx);
+    create_planet(nb_p);
   }
+  std::cout << "End univers generation" << std::endl;
 }
 
 void Game::load_accounts(std::string file)

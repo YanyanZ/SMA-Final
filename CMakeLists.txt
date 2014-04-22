@@ -1,7 +1,7 @@
 project(UTU-Bots C CXX)
 cmake_minimum_required(VERSION 2.6)
 
-set (CMAKE_CXX_FLAGS "-std=c++11 -g -Wall -Werror -Wno-unknown-pragmas")
+set (CMAKE_CXX_FLAGS "-std=c++11 -g -Wall -Wno-unknown-pragmas")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/module/")
 

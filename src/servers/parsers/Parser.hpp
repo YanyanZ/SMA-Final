@@ -22,8 +22,8 @@ namespace Parser
 
   struct Move
   {
-    int x;
-    int y;
+    int dx;
+    int dy;
   };
 }
 
@@ -35,8 +35,8 @@ BOOST_FUSION_ADAPT_STRUCT(
 
 BOOST_FUSION_ADAPT_STRUCT(
   Parser::Move,
-  (int, x)
-  (int, y)
+  (int, dx)
+  (int, dy)
   )
 
 namespace Parser

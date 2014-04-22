@@ -27,6 +27,10 @@
 #include <string.h>
 #include <string>
 
+# include <utility>
+# include <vector>
+
+
 #include "../include/noise/noise.h"
 
 using namespace noise;
@@ -130,7 +134,7 @@ namespace noise
         /// @param a Value of the alpha (transparency) channel.
         Color (noise::uint8 r, noise::uint8 g, noise::uint8 b,
           noise::uint8 a):
-          red (r), green (g), blue (b), alpha (a)
+	alpha (a), blue (b), green (g), red (r)
         {
         }
 
@@ -1163,7 +1167,7 @@ namespace noise
         /// file.  Before calling this method, call the SetSourceImage()
         /// method to specify the image, then call the SetDestFilename()
         /// method to specify the name of the file to write.
-        void WriteDestFile ();
+        void WriteDestFile (std::vector<std::vector<char> >& map);
 
       protected:
 
@@ -1212,8 +1216,8 @@ namespace noise
 
         /// Constructor.
         WriterTER ():
-          m_pSourceNoiseMap (NULL),
-          m_metersPerPoint (DEFAULT_METERS_PER_POINT)
+      m_metersPerPoint (DEFAULT_METERS_PER_POINT),
+	  m_pSourceNoiseMap (NULL)
         {
         }
 

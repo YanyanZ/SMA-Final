@@ -1,6 +1,6 @@
 set( CMAKE_CXX_FLAGS "-O3" )
 
-add_library(noise STATIC
+add_library(Noise STATIC
   src/latlon.cpp
   src/noisegen.cpp
   src/model/cylinder.cpp
