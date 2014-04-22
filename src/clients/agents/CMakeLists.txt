@@ -1,5 +1,5 @@
 set(CLIENT_NAME clientTest)
-set(SOURCES Client.cpp)
+set(SOURCES Client.cpp Player.cpp)
 
 add_executable(${CLIENT_NAME} ${SOURCES})
 

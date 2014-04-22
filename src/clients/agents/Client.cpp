@@ -55,12 +55,11 @@ void Client::run(void)
 
       s.send_to(boost::asio::buffer(req, req.size()), endpoint);
 
-      size_t reply_length = s.receive_from(
-	boost::asio::buffer(reply, max_length), sender_endpoint);
+      s.receive_from(boost::asio::buffer(reply, max_length), sender_endpoint);
 
       std::string reply_str(reply);
       std::cout << "Reply is: " << reply_str << std::endl;
-      if (reply == "ok")
+      if (reply_str.compare("ok") == 0)
       {
         p.pos_x += m.first;
         p.pos_y += m.second;
