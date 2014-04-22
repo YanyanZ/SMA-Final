@@ -19,22 +19,21 @@ Game::~Game(void)
 
 void Game::load_planets(void)
 {
-  
   for (int nb_p = 0; nb_p < 1; ++nb_p)
   {
-    std::vector<std::vector<uchar> > tmp_p;
-    
+    Matrix tmp_mx;
+
     for (int i = 0; i < 800; ++i)
     {
-      std::vector<uchar> tmp_i;
+      std::vector<std::pair<uchar, Player*> > tmp_i;
 
       for (int j = 0; j < 800; ++j)
-        tmp_i.push_back('0');
+        tmp_i.push_back(std::make_pair<uchar, Player*>(0, nullptr));
 
-      tmp.push_back(tmp_i);
+      tmp_mx.push_back(tmp_i);
     }
 
-    univers.push_back(tmp_p);
+    univers.push_back(tmp_mx);
   }
 }
 
@@ -54,7 +53,7 @@ void Game::run(void)
     std::string crequest = std::string(boost::asio::buffer_cast<char*>(boost::asio::buffer(data, max_length)));
     crequest = crequest.substr(0, length);
 
-    std::string reply = parse_request(crequest);
+    std::string reply = exec_request(crequest, sender_endpoint.address().to_string(), std::to_string(sender_endpoint.port()));
     sock.send_to(boost::asio::buffer(reply.c_str(), reply.size()), sender_endpoint);
   }
 }
