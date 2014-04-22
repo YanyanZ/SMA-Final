@@ -11,6 +11,7 @@
 # include <cstdlib>
 # include <iostream>
 # include <ctime>
+# include <vector>
 
 /*!
  * \brief Namespace that contains all servers

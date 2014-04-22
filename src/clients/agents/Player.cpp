@@ -59,6 +59,9 @@ void Player::action_result(bool res)
 
       std::cout << "Added block type " << req_params[0] << " @ pos: x: "
         << pos_x + req_params[1] << " y: " << pos_y + req_params[2] << std::endl;
+
+      char c;
+      std::cin >> c;
   	}
   }
   else
@@ -83,12 +86,12 @@ std::string Player::get_action(void)
 
   if (pos_x == dst.first && pos_y == dst.second)
   {
-  	uchar block_code = 1;
+  	char block_code = 1;
   	int dx = 0;
   	int dy = 0;
 
-  	req = "add{" + std::to_string(block_code) + "," + std::to_string(dx)
-  	  + "," + std::to_string(dy) + "}";
+  	req = "add{" + std::to_string(block_code) + ";" + std::to_string(dx)
+  	  + ";" + std::to_string(dy) + "}";
 
   	req_type = 1;
   	req_params.push_back((int)block_code);
