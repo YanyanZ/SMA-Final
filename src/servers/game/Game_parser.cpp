@@ -4,7 +4,7 @@ using namespace Servers;
 
 bool Game::is_account_exist(std::string ip)
 {
-  return players.end() != players.find(ip));
+  return players.end() != players.find(ip);
 }
 
 int Game::parse_request(std::string& line, std::string& ip)
@@ -50,6 +50,7 @@ std::string Game::exec_request(std::string line, std::string ip, std::string por
   {
     Player* p = new Player(co.user, co.pass);
     players[ip] = p;
+    update_users_page();
   }
   else if (1 == ret)
   {

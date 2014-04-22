@@ -118,7 +118,7 @@ namespace Servers
     std::string exec_request(std::string line, std::string ip, std::string port);
 
   private:
-    void update_users(void);
+    void update_users_page(void);
 
   public:
     /*!

@@ -55,9 +55,9 @@ namespace Parser
 
       quoted_string %= lexeme['"' >> +(char_ - '"') >> '"'];
 
-      start %= lit("connexion")
+      start %= lit("co")
 	>> '{'
-	>> quoted_string >> ','
+	>> quoted_string >> ';'
 	>> quoted_string
 	>> '}';
     }

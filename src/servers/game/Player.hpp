@@ -41,8 +41,10 @@ namespace Servers
 
     int world_id;
 
-  private:
+  public:
     std::string user_name;
+
+  private:
     std::string pwd;
   };
 }
