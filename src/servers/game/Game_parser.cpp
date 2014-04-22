@@ -120,9 +120,10 @@ std::string Game::exec_request(std::string line, std::string ip, std::string por
     int dst_x = (p->pos_x + ge.dx) % 800 < 0 ? 799 : (p->pos_x + ge.dx) % 800;
     int dst_y = (p->pos_y + ge.dy) % 800 < 0 ? 799 : (p->pos_y + ge.dy) % 800;
 
-    uchar block_code = m[dst_x][dst_y].first;
+    char block_code = m[dst_x][dst_y].first;
 
-    std::string ret = std::to_string(block_code);
+    std::string ret;
+    ret += block_code;
     return ret;
   }
 

@@ -48,7 +48,7 @@ void Player::dump_inventory(void)
     << "code:\tnb" << std::endl;
 
   for (auto& item: inventory)
-    std::cout << "  " << item.first << ":\t" << item.second << std::endl;
+    std::cout << "  " << (int)(item.first) << ":\t" << item.second << std::endl;
 }
 
 void Player::action_result(std::string ret)
