@@ -47,8 +47,8 @@ int Client::parse(std::string line)
     {
       p.rcv_msg(send.sender, send.msg);
       // std::cout << send.msg << std::endl;
-      // send.msg = "";
-      // send.sender = "";
+      send.msg = "";
+      send.sender = "";
       return 0;
     }
   /*  else if (phrase_parse(iter, end, fovg, space, fov) && iter == end)
@@ -83,8 +83,8 @@ void Client::run(void)
       // parse reply_str here and call proper player methode
       parse(reply_str);
       // p.action_result(reply_str);
-      char c;
-      std::cin >> c;
+      //char c;
+      //std::cin >> c;
 
       // if (reply_str.compare("ok") == 0)
       // {
