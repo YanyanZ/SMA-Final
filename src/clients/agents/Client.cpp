@@ -47,8 +47,8 @@ void Client::run(void)
       //std::cin.getline(request, max_length);
       /* Fin changement */
 
-      std::string req = get_next_move();
-      s.send_to(boost::asio::buffer(req.c_str, req.size()), endpoint);
+      std::string req = "move{1,2,3,4}";//get_next_move();
+      s.send_to(boost::asio::buffer(req.c_str(), req.size()), endpoint);
 
       size_t reply_length = s.receive_from(
 	boost::asio::buffer(reply, max_length), sender_endpoint);

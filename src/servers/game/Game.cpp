@@ -17,8 +17,25 @@ Game::~Game(void)
 {
 }
 
-void Game::load_planets(std::vector<std::string> files)
+void Game::load_planets(void)
 {
+  
+  for (int nb_p = 0; nb_p < 1; ++nb_p)
+  {
+    std::vector<std::vector<uchar> > tmp_p;
+    
+    for (int i = 0; i < 800; ++i)
+    {
+      std::vector<uchar> tmp_i;
+
+      for (int j = 0; j < 800; ++j)
+        tmp_i.push_back('0');
+
+      tmp.push_back(tmp_i);
+    }
+
+    univers.push_back(tmp_p);
+  }
 }
 
 void Game::load_accounts(std::string file)

@@ -37,8 +37,8 @@ enum { max_length = 1024 };
 namespace Servers
 {
   typedef unsigned char uchar;
-  typedef std::vector<std::vector<std::vector<uchar> > > Cube;
-  typedef std::vector<std::vector<std::tuple<uchar, uchar, uchar> > > Matrix;
+  // typedef std::vector<std::vector<uchar> > Cube;
+  typedef std::vector<std::vector<std::pair<uchar, Player*> > > Matrix;
 
   using boost::spirit::ascii::space;
   typedef std::string::const_iterator iterator_type;
@@ -63,7 +63,8 @@ namespace Servers
     const int max_nb_players; /*!< Maximum number of players in the game */
 
   private:
-    std::vector<Cube*> planets; /*!< Planets pointer */
+    std::vector<Matrix> univers; /*!< Planets pointer */
+    std::vector<Player*> players;
 //    std::map<std::string, std::tuple<std::string, BagDescriptor, PlayerInfo>
 //	     accounts; /*<! Account list and players info */
 
@@ -89,7 +90,7 @@ namespace Servers
      * \brief Load planets from files
      * \param files : Planete Data files
      */
-    void load_planets(std::vector<std::string> files);
+    void load_planets(void);
     /*!
      * \brief Loads accounts informations
      * \param file : XML file that contains player's accounts
