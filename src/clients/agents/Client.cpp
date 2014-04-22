@@ -55,7 +55,9 @@ void Client::run(void)
       // std::string req("move{");
       // req += std::to_string(m.first) + ";" + std::to_string(m.second) + "}";
 
-      std::string req(p.get_action());
+      //std::string req(p.get_action());
+
+      std::string req = "mb{\"Je fais un test\"}";
 
       s.send_to(boost::asio::buffer(req, req.size()), endpoint);
 

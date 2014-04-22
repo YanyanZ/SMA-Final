@@ -62,7 +62,7 @@ void Player::action_result(std::string ret)
     dst.first = std::rand() % 800;
     dst.second = std::rand() % 800;
   }
-  else
+  else if (ret == "ok")
   {
     if (0 == req_type)
     {
@@ -103,6 +103,12 @@ void Player::action_result(std::string ret)
       std::cin >> c;
     }
   }
+  else
+    {
+      std::cout << ret << std::endl;
+      char c;
+      std::cin >> c;
+    }
 
   req_params.clear();
 }

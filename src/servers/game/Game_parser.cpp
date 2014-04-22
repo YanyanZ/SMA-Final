@@ -20,13 +20,13 @@ void Game::sendmessage(std::string sender, std::string msg, udp::socket& sock)
 void Game::broadcast(std::string from, std::string msg)
 {
   udp::socket sock(io_service, udp::endpoint(udp::v4(), port + 1));
-  std::cout << "> Broadcast: " << msg << std::endl;
   for (std::map<std::string, Player*>::iterator it = players.begin(); it != players.end(); it++)
     {
       std::stringstream newmsg;
-      newmsg << "bo{\"" << from << "\";\"" << it->second->user_name << "\"}"; 
+      newmsg << "bo{\"" << from << "\";\"" << it->second->user_name << ": " << msg <<"\"}"; 
       sendmessage(it->first, newmsg.str(), sock);
     }
+  sock.close();
 }
 
 int Game::parse_request(std::string& line, std::string& ip, udp::socket& sock)
@@ -50,11 +50,14 @@ int Game::parse_request(std::string& line, std::string& ip, udp::socket& sock)
   else if (phrase_parse(iter, end, bg, space, broad) && iter == end)
     {
       broadcast(ip, broad.msg);
+      broad.msg = "";
       return -2;
       }
   else if (phrase_parse(iter, end, sg, space, send) && iter == end)
     {
       sendmessage(send.sender, send.msg, sock);
+      send.sender = "";
+      send.msg = "";
       return -2;
       }
   else if (phrase_parse(iter, end, mg, space, mv) && iter == end)
@@ -90,7 +93,6 @@ std::string Game::exec_request(std::string line, std::string ip, std::string por
   {
     Player* p = new Player(co.user, co.pass);
     players[ip] = p;
-    update_users_page();
   }
   else if (1 == ret)
   {
