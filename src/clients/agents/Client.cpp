@@ -60,8 +60,8 @@ void Client::run(void)
       s.receive_from(boost::asio::buffer(reply, max_length), sender_endpoint);
 
       std::string reply_str(reply);
-      std::cout << "Reply is: " << reply_str << std::endl;
-      p.action_result(0 == reply_str.compare("ok"));
+      std::cout << "Reply is: '" << reply_str << "'" << std::endl;
+      p.action_result(reply_str);
       // if (reply_str.compare("ok") == 0)
       // {
       //   p.action_result(true);

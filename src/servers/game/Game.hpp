@@ -45,7 +45,8 @@ namespace Servers
   typedef std::string::const_iterator iterator_type;
   typedef Parser::request_connexion<iterator_type> CRequest_parser;
   typedef Parser::request_move<iterator_type> MRequest_parser;
-  typedef Parser::request_add<iterator_type> ARequest_parser;
+  typedef Parser::request_put<iterator_type> PRequest_parser;
+  typedef Parser::request_get<iterator_type> GRequest_parser;
 
   /*!
    * \class Class that containt all Game Server fonction and data
@@ -55,12 +56,14 @@ namespace Servers
   private:
     CRequest_parser cg; /*!< Grammar for Connexion Requests*/
     MRequest_parser mg; /*!< Grammar for Move Requests */
-    ARequest_parser ag; /*!< Grammar for Add Requests */
+    PRequest_parser pg; /*!< Grammar for Put Requests */
+    GRequest_parser gg; /*!< Grammar for Get Requests */
 
   private:
     Parser::Connexion co; /*!< Connexion structure */
     Parser::Move mv; /*!< Move structure */
-    Parser::Add add; /*!< Add structure */
+    Parser::Put pu; /*!< Put structure */
+    Parser::Get ge; /*!< Put structure */
 
   private:
     const int max_nb_planets; /*!< Maximum number of planets in the game */

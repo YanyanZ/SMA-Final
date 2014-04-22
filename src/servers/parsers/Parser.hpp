@@ -26,9 +26,15 @@ namespace Parser
     int dy;
   };
 
-  struct Add
+  struct Put
   {
     char block_code;
+    int dx;
+    int dy;
+  };
+
+  struct Get
+  {
     int dx;
     int dy;
   };
@@ -47,8 +53,14 @@ BOOST_FUSION_ADAPT_STRUCT(
   )
 
 BOOST_FUSION_ADAPT_STRUCT(
-  Parser::Add,
+  Parser::Put,
   (char, block_code)
+  (int, dx)
+  (int, dy)
+  )
+
+BOOST_FUSION_ADAPT_STRUCT(
+  Parser::Get,
   (int, dx)
   (int, dy)
   )
@@ -96,21 +108,38 @@ namespace Parser
   };
 
   template <typename Iterator>
-  struct request_add : qi::grammar<Iterator, Add(), ascii::space_type>
+  struct request_put : qi::grammar<Iterator, Put(), ascii::space_type>
   {
-    request_add() : request_add::base_type(start)
+    request_put() : request_put::base_type(start)
     {
       using qi::int_;
       using ascii::char_;
       using qi::lit;
 
-      start %= lit("add")
+      start %= lit("put")
   >> '{'
   >> char_ >> ";" >> int_ >> ';' >> int_
   >> '}';
     }
 
-    qi::rule<Iterator, Add(), ascii::space_type> start;
+    qi::rule<Iterator, Put(), ascii::space_type> start;
+  };
+
+  template <typename Iterator>
+  struct request_get : qi::grammar<Iterator, Get(), ascii::space_type>
+  {
+    request_get() : request_get::base_type(start)
+    {
+      using qi::int_;
+      using qi::lit;
+
+      start %= lit("get")
+  >> '{'
+  >> int_ >> ';' >> int_
+  >> '}';
+    }
+
+    qi::rule<Iterator, Get(), ascii::space_type> start;
   };
 }
 

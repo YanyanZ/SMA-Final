@@ -36,7 +36,7 @@ namespace Servers
     ~Player(void);
 
     std::string get_action(void);
-    void action_result(bool res);
+    void action_result(std::string ret);
 
     int pos_x;
     int pos_y;
@@ -53,7 +53,10 @@ namespace Servers
     int req_type;
     std::vector<int> req_params;
 
+    std::map<char, int> inventory;
+
     std::pair<int, int> get_move(void);
+    void dump_inventory(void);
   };
 }
 #endif
