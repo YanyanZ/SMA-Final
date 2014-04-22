@@ -26,6 +26,7 @@
 # include <boost/fusion/include/io.hpp>
 
 # include "../parsers/Parser.hpp"
+# include "Player.hpp"
 
 using boost::asio::ip::udp;
 
@@ -64,7 +65,8 @@ namespace Servers
 
   private:
     std::vector<Matrix> univers; /*!< Planets pointer */
-    std::vector<Player*> players;
+    // std::vector<Player*> players;
+    std::map<std::string, Player*> players;
 //    std::map<std::string, std::tuple<std::string, BagDescriptor, PlayerInfo>
 //	     accounts; /*<! Account list and players info */
 
@@ -104,7 +106,7 @@ namespace Servers
      * \param p : Password
      * \return true if the accound is found, false otherwise
      */
-    bool is_account_exist(std::string u, std::string p);
+    bool is_account_exist(std::string ip);
 
   private:
     /*!
@@ -112,7 +114,8 @@ namespace Servers
      * \param line : The string to parse
      * \return "fail" or "ok"
      */
-    std::string parse_request(std::string line);
+    int parse_request(std::string& line, std::string& ip);
+    std::string exec_request(std::string line, std::string ip, std::string port);
 
   private:
     void update_users(void);
