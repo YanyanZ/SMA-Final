@@ -122,7 +122,7 @@ void Player::action_result(std::string ret)
 
 std::string Player::move(int dx, int dy)
 {
-  std::stirng req;
+  std::string req;
 
   req = "move{";
   req += std::to_string(dx) + ";" + std::to_string(dy) + "}";
@@ -136,13 +136,13 @@ std::string Player::move(int dx, int dy)
 
 std::string Player::put(char bc, int dx, int dy)
 {
-  std::stirng req;
+  std::string req;
 
   req = "put{" + std::to_string(bc) + ";" + std::to_string(dx)
     + ";" + std::to_string(dy) + "}";
 
   req_type = 1;
-  req_params.push_back((int)block_code);
+  req_params.push_back(20/*block_code*/);
   req_params.push_back(dx);
   req_params.push_back(dy);
 
@@ -151,7 +151,7 @@ std::string Player::put(char bc, int dx, int dy)
 
 std::string Player::get(int dx, int dy)
 {
-  std::stirng req;
+  std::string req;
 
   req = "get{" + std::to_string(dx) + ";" + std::to_string(dy) + "}";
 
@@ -164,7 +164,7 @@ std::string Player::get(int dx, int dy)
 
 std::string Player::msg_broadcast(std::string msg)
 {
-  std::stirng req;
+  std::string req;
 
   req = "mb{\"" + msg + "\"}";
 
@@ -173,7 +173,7 @@ std::string Player::msg_broadcast(std::string msg)
 
 std::string Player::msg(std::string user_ip, std::string msg)
 {
-  std::stirng req;
+  std::string req;
 
   req = "ms{\"" + user_ip + "\",\"" + msg + "\"}";
 

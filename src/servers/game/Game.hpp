@@ -50,6 +50,7 @@ namespace Servers
   typedef Parser::request_get<iterator_type> GRequest_parser;
   typedef Parser::request_broadcast<iterator_type> BRequest_parser;
   typedef Parser::request_message<iterator_type> SRequest_parser;
+  typedef Parser::request_rfov<iterator_type> RFOVRequest_parser;
 
   /*!
    * \class Class that containt all Game Server fonction and data
@@ -63,6 +64,7 @@ namespace Servers
     GRequest_parser gg; /*!< Grammar for Get Requests */
     BRequest_parser bg; /*!< Grammar for Broadcast */
     SRequest_parser sg;
+    RFOVRequest_parser rfovg;
 
   private:
     Parser::Connexion co; /*!< Connexion structure */
@@ -71,6 +73,7 @@ namespace Servers
     Parser::Get ge; /*!< Put structure */
     Parser::Broadcast broad;
     Parser::Message send;
+    Parser::RFieldOfView rfov;
 
   private:
     const int max_nb_planets; /*!< Maximum number of planets in the game */

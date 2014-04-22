@@ -6,9 +6,6 @@ Client::Client(std::string u, std::string ps, char* h, char* p, boost::asio::io_
   : p(u, ps)/*username (u), password (ps)*/, host (h), port (p),
     s(io_service, udp::endpoint(udp::v4(), 0)), resolver(io)
 {
-  fov.resize(16);
-  for (int i = 0; i < fov.size(); i++)
-    fov[i].resize(16);
 
   endpoint = *resolver.resolve({udp::v4(), host, port});
 
@@ -26,35 +23,37 @@ bool Client::is_connected(void)
 
   s.send_to(boost::asio::buffer(request.c_str(), request.size()), endpoint);
   size_t reply_length = s.receive_from(
-    boost::asio::buffer(reply, max_length), sender_endpoint);
+    boost::asio::buffer(rep, max_length), sender_endpoint);
 
-  std::string rep = std::string(boost::asio::buffer_cast<char*>(boost::asio::buffer(reply, reply_length)));
-  rep = rep.substr(0, reply_length);
+  std::string repp = std::string(boost::asio::buffer_cast<char*>(boost::asio::buffer(rep, reply_length)));
 
-  if (rep.compare("ok") == 0)
+  if (parse(repp) == 0)
     return true;
   else
     return false;
 }
 
-void Client::parse(std::string line)
+int Client::parse(std::string line)
 {
   std::string::const_iterator iter = line.begin();
   std::string::const_iterator end = line.end();
 
-  std::cout << "> Request: '" << line << "'" << std::endl;
-  if (phrase_parse(iter, end, bg, space, br) && iter == end)
+  std::cout << "> Input: '" << line << "'" << std::endl;
+  if (phrase_parse(iter, end, brg, space, reply) && iter == end)
   {
+    return reply.r;
   }
-  else if (phrase_parse(iter, end, gg, space, gr) && iter == end)
-  {
-  }
-  else if (phrase_parse(iter, end, mg, space, mr) && iter == end)
-  {
-  }
+  else if (phrase_parse(iter, end, sg, space, send) && iter == end)
+    {
+      std::cout << send.msg << std::endl;
+      send.msg = "";
+      send.sender = "";
+      return 0;
+    }
+  /*  else if (phrase_parse(iter, end, fovg, space, fov) && iter == end)
+      return 0;*/
   else
-  {
-  }
+    return 1;
 }
 
 void Client::run(void)
@@ -63,13 +62,7 @@ void Client::run(void)
   {
     while (true)
     {
-      memset(reply, 0, max_length);
-
-      /* A changer */
-      // std::cout << "Enter message: ";
-      // std::string req;
-      // std::cin >> req;
-      /* Fin changement */
+      memset(rep, 0, max_length);
 
       // std::pair<int, int> m = p.get_move();
       // std::string req("move{");
@@ -77,18 +70,20 @@ void Client::run(void)
 
       //std::string req(p.get_action());
 
-      std::string req = "mb{\"Je fais un test\"}";
+      //      std::string req = "mb{\"Je fais un test\"}";
+      std::string req = "rfov{400;400}";
 
       s.send_to(boost::asio::buffer(req, req.size()), endpoint);
 
-      s.receive_from(boost::asio::buffer(reply, max_length), sender_endpoint);
+      s.receive_from(boost::asio::buffer(rep, max_length), sender_endpoint);
 
-      std::string reply_str(reply);
+      std::string reply_str(rep);
 
       // parse reply_str here and call proper player methode
       parse(reply_str);
       // p.action_result(reply_str);
-
+      char c;
+      std::cin >> c;
 
       // if (reply_str.compare("ok") == 0)
       // {
@@ -99,11 +94,6 @@ void Client::run(void)
       // }
       // else
       //   std::cout << "Pos is still: x: " << p.pos_x << " y: " << p.pos_y << std::endl;
-    /* A changer */
-      // std::cout << "Reply is: ";
-      // std::cout.write(reply, reply_length);
-      // std::cout << "\n";
-      /* Fin changement */
     }
   }
   else

@@ -44,7 +44,7 @@ void Game::run(void)
     std::string crequest = std::string(boost::asio::buffer_cast<char*>(boost::asio::buffer(data, max_length)));
     crequest = crequest.substr(0, length);
 
-    std::cout << " CR: " << crequest << std::endl;
+    std::cout << crequest << std::endl;
 
     std::string reply = exec_request(crequest, sender_endpoint.address().to_string(), std::to_string(sender_endpoint.port()), sock);
 

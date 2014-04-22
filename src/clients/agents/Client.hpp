@@ -20,25 +20,25 @@ using namespace Servers;
 namespace Clients
 {
   typedef unsigned char uchar;
-  typedef std::vector<std::vector<std::tuple<uchar, uchar> > > FOV;
 
   using boost::spirit::ascii::space;
   typedef std::string::const_iterator iterator_type;
-  typedef Parser::request_toclientboolreply<iterator_type> BRequest_parser;
-  typedef Parser::request_toclientgetreply<iterator_type> GRequest_parser;
-  typedef Parser::request_toclientmsg<iterator_type> MRequest_parser;
+
+  typedef Parser::request_message<iterator_type> SRequest_parser;
+  typedef Parser::request_toclientboolreply<iterator_type> BRRequest_parser;
+  typedef Parser::request_fov<iterator_type> FOVRequest_parser;
 
   class Client
   {
   private:
-    BRequest_parser bg; /*!< Grammar for Boolean Reply*/
-    GRequest_parser gg; /*!< Grammar for Get Reply */
-    MRequest_parser mg; /*!< Grammar for Message */
+    SRequest_parser sg;
+    BRRequest_parser brg;
+    //FOVRequest_parser fovg;
 
   private:
-    Parser::ToClientBoolReply br; /*!< ToClientBoolReply structure */
-    Parser::ToClientGetReply gr; /*!< ToClientBoolReply structure */
-    Parser::ToClientMSG mr; /*!< ToClientBoolReply structure */
+    Parser::Message send;
+    Parser::ToClientBoolReply reply;
+    //Parser::FieldOfView fov;
 
   protected:
     // std::string username;
@@ -55,10 +55,7 @@ namespace Clients
     udp::endpoint sender_endpoint;
 
   protected:
-    char reply[max_length];
-
-  protected:
-    FOV fov;
+    char rep[max_length];
 
   public:
     Client(std::string u, std::string ps, char* h, char* p, boost::asio::io_service& io);
@@ -66,7 +63,7 @@ namespace Clients
 
   protected:
     bool is_connected(void);
-    void parse(std::string line);
+    int parse(std::string line);
 
   public:
     virtual void run(void);

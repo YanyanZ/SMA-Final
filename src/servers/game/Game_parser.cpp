@@ -23,7 +23,7 @@ void Game::broadcast(std::string from, std::string msg)
   for (std::map<std::string, Player*>::iterator it = players.begin(); it != players.end(); it++)
     {
       std::stringstream newmsg;
-      newmsg << "bo{\"" << from << "\";\"" << it->second->user_name << ": " << msg <<"\"}"; 
+      newmsg << "ms{\"" << from << "\";\"" << it->second->user_name << ": " << msg <<"\"}"; 
       sendmessage(it->first, newmsg.str(), sock);
     }
   sock.close();
@@ -37,7 +37,6 @@ int Game::parse_request(std::string& line, std::string& ip, udp::socket& sock)
   std::cout << "> Request: '" << line << "'" << std::endl;
   if (phrase_parse(iter, end, cg, space, co) && iter == end)
   {
-    std::cout << " DONE" << std::endl;
     if (!is_account_exist(ip))
     {
       return 0;
@@ -72,10 +71,10 @@ int Game::parse_request(std::string& line, std::string& ip, udp::socket& sock)
   {
     return 3;
   }
+  else if (phrase_parse(iter, end, rfovg, space, rfov) && iter == end)
+    return 4;
   else
   {
-    std::cout << " FAIL" << std::endl;
-
     return -1;
   }
 }
@@ -86,18 +85,20 @@ std::string Game::exec_request(std::string line, std::string ip, std::string por
 
   ip += ":" + port;
   if (0 > (ret = parse_request(line, ip, sock)))
-    return "fail";
+    return "rep{1}";
 
   // connexion
   if (0 == ret)
   {
     Player* p = new Player(co.user, co.pass);
     players[ip] = p;
+    co.user = "";
+    co.pass = "";
   }
   else if (1 == ret)
   {
     if (!is_account_exist(ip))
-      return "fail";
+      return "rep{1}";
 
     Player* p = players[ip];
     Matrix m = univers[p->world_id];
@@ -112,7 +113,7 @@ std::string Game::exec_request(std::string line, std::string ip, std::string por
   else if (2 == ret)
   {
     if (!is_account_exist(ip))
-      return "fail";
+      return "rep{0}";
 
     Player* p = players[ip];
     Matrix m = univers[p->world_id];
@@ -125,7 +126,7 @@ std::string Game::exec_request(std::string line, std::string ip, std::string por
   else if (3 == ret)
   {
     if (!is_account_exist(ip))
-      return "fail";
+      return "rep{1}";
 
     Player* p = players[ip];
     Matrix m = univers[p->world_id];
@@ -139,8 +140,18 @@ std::string Game::exec_request(std::string line, std::string ip, std::string por
     ret += block_code;
     return ret;
   }
-  else if (-2 == ret)
-    return "";
+  else if (4 == ret)
+    {
+      std::stringstream ss;
+      ss << "fov{";
 
-  return "ok";
+      for (int i = rfov.x - 2; i < rfov.x + 1; i++)
+	for (int j = rfov.y - 2; j < rfov.y + 2; j++)
+	    ss << univers[0][i][j].first << ";"; 
+      ss << univers[0][rfov.x + 1][rfov.y + 1].first << "}";
+
+      return ss.str();
+    }
+
+  return "rep{0}";
 }
