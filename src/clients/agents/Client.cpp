@@ -37,6 +37,26 @@ bool Client::is_connected(void)
     return false;
 }
 
+void Client::parse(std::string line)
+{
+  std::string::const_iterator iter = line.begin();
+  std::string::const_iterator end = line.end();
+
+  std::cout << "> Request: '" << line << "'" << std::endl;
+  if (phrase_parse(iter, end, bg, space, br) && iter == end)
+  {
+  }
+  else if (phrase_parse(iter, end, gg, space, gr) && iter == end)
+  {
+  }
+  else if (phrase_parse(iter, end, mg, space, mr) && iter == end)
+  {
+  }
+  else
+  {
+  }
+}
+
 void Client::run(void)
 {
   if (is_connected())
@@ -64,8 +84,12 @@ void Client::run(void)
       s.receive_from(boost::asio::buffer(reply, max_length), sender_endpoint);
 
       std::string reply_str(reply);
-      std::cout << "Reply is: '" << reply_str << "'" << std::endl;
-      p.action_result(reply_str);
+
+      // parse reply_str here and call proper player methode
+      parse(reply_str);
+      // p.action_result(reply_str);
+
+
       // if (reply_str.compare("ok") == 0)
       // {
       //   p.action_result(true);
