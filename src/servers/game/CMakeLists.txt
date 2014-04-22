@@ -1,0 +1,7 @@
+set(SERVER_NAME gameServer)
+set(SOURCES Game.cpp Game_parser.cpp)
+
+add_executable(${SERVER_NAME} ${SOURCES})
+
+target_link_libraries(${SERVER_NAME} ${Boost_LIBRARIES})
+target_link_libraries(${SERVER_NAME} Parser)
