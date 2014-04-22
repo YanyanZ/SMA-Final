@@ -78,7 +78,7 @@ void Player::action_result(std::string ret)
       std::cout << "Added block type " << req_params[0] << " @ pos: x: "
         << pos_x + req_params[1] << " y: " << pos_y + req_params[2] << std::endl;
 
-      inventory[block_code]--;
+      inventory[(char)(req_params[0])]--;
 
       dump_inventory();
 

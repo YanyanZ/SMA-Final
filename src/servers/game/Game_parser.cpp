@@ -101,7 +101,7 @@ std::string Game::exec_request(std::string line, std::string ip, std::string por
 
     uchar block_code = m[dst_x][dst_y].first;
 
-    std::string ret(block_code);
+    std::string ret = std::to_string(block_code);
     return ret;
   }
 
