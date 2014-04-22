@@ -38,6 +38,33 @@ namespace Parser
     int dx;
     int dy;
   };
+
+  struct ToClientBoolReply
+  {
+    int r;
+  };
+
+  struct ToClientGetReply
+  {
+    char block_code;
+  };
+
+  struct ToClientMSG
+  {
+    std::string user_ip;
+    std::string msg;
+  };
+
+  struct ToServerMSGBroadc
+  {
+    std::string msg;
+  };
+
+  struct ToServerMSG
+  {
+    std::string user_ip;
+    std::string msg;
+  };
 }
 
 BOOST_FUSION_ADAPT_STRUCT(
@@ -63,6 +90,33 @@ BOOST_FUSION_ADAPT_STRUCT(
   Parser::Get,
   (int, dx)
   (int, dy)
+  )
+
+BOOST_FUSION_ADAPT_STRUCT(
+  Parser::ToClientBoolReply,
+  (int, r)
+  )
+
+BOOST_FUSION_ADAPT_STRUCT(
+  Parser::ToClientGetReply,
+  (int, block_code)
+  )
+
+BOOST_FUSION_ADAPT_STRUCT(
+  Parser::ToClientMSG,
+  (std::string, user_ip)
+  (std::string, msg)
+  )
+
+BOOST_FUSION_ADAPT_STRUCT(
+  Parser::ToServerMSGBroadc,
+  (std::string, msg)
+  )
+
+BOOST_FUSION_ADAPT_STRUCT(
+  Parser::ToServerMSG,
+  (std::string, user_ip)
+  (std::string, msg)
   )
 
 namespace Parser
@@ -140,6 +194,105 @@ namespace Parser
     }
 
     qi::rule<Iterator, Get(), ascii::space_type> start;
+  };
+
+  template <typename Iterator>
+  struct request_toclientboolreply : qi::grammar<Iterator, ToClientBoolReply(), ascii::space_type>
+  {
+    request_toclientboolreply() : request_toclientboolreply::base_type(start)
+    {
+      using qi::int_;
+      using qi::lit;
+
+      start %= lit("rep")
+  >> '{'
+  >> int_
+  >> '}';
+    }
+
+    qi::rule<Iterator, ToClientBoolReply(), ascii::space_type> start;
+  };
+
+  template <typename Iterator>
+  struct request_toclientgetreply : qi::grammar<Iterator, ToClientGetReply(), ascii::space_type>
+  {
+    request_toclientgetreply() : request_toclientgetreply::base_type(start)
+    {
+      using ascii::char_;
+      using qi::lit;
+
+      start %= lit("getrep")
+  >> '{'
+  >> char_
+  >> '}';
+    }
+
+    qi::rule<Iterator, ToClientGetReply(), ascii::space_type> start;
+  };
+
+  template <typename Iterator>
+  struct request_toclientmsg : qi::grammar<Iterator, ToClientMSG(), ascii::space_type>
+  {
+    request_toclientmsg() : request_toclientmsg::base_type(start)
+    {
+      using qi::lit;
+      using qi::lexeme;
+      using ascii::char_;
+
+      quoted_string %= lexeme['"' >> +(char_ - '"') >> '"'];
+
+      start %= lit("m")
+  >> '{'
+  >> quoted_string >> ';'
+  >> quoted_string
+  >> '}';
+    }
+
+    qi::rule<Iterator, std::string(), ascii::space_type> quoted_string;
+    qi::rule<Iterator, ToClientMSG(), ascii::space_type> start;
+  };
+
+  template <typename Iterator>
+  struct request_toservermsgbroadc : qi::grammar<Iterator, ToServerMSGBroadc(), ascii::space_type>
+  {
+    request_toservermsgbroadc() : request_toservermsgbroadc::base_type(start)
+    {
+      using qi::lit;
+      using qi::lexeme;
+      using ascii::char_;
+
+      quoted_string %= lexeme['"' >> +(char_ - '"') >> '"'];
+
+      start %= lit("mb")
+  >> '{'
+  >> quoted_string
+  >> '}';
+    }
+
+    qi::rule<Iterator, std::string(), ascii::space_type> quoted_string;
+    qi::rule<Iterator, ToServerMSGBroadc(), ascii::space_type> start;
+  };
+
+  template <typename Iterator>
+  struct request_toservermsg : qi::grammar<Iterator, ToServerMSG(), ascii::space_type>
+  {
+    request_toservermsg() : request_toservermsg::base_type(start)
+    {
+      using qi::lit;
+      using qi::lexeme;
+      using ascii::char_;
+
+      quoted_string %= lexeme['"' >> +(char_ - '"') >> '"'];
+
+      start %= lit("ms")
+  >> '{'
+  >> quoted_string >> ';'
+  >> quoted_string
+  >> '}';
+    }
+
+    qi::rule<Iterator, std::string(), ascii::space_type> quoted_string;
+    qi::rule<Iterator, ToServerMSG(), ascii::space_type> start;
   };
 }
 

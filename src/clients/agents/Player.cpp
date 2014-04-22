@@ -53,6 +53,8 @@ void Player::dump_inventory(void)
 
 void Player::action_result(std::string ret)
 {
+  // Prper parsing here
+
   if (0 == ret.compare("fail"))
   {
     std::cout << "Failed action type: " << req_type << "with params:" << std::endl;
@@ -64,12 +66,15 @@ void Player::action_result(std::string ret)
   }
   else
   {
+    // Move
     if (0 == req_type)
     {
         pos_x += req_params[0];
         pos_y += req_params[1];
         std::cout << "New pos: x: " << pos_x << " y: " << pos_y << std::endl;
     }
+
+    // Put
     else if (1 == req_type)
     {
       dst.first = std::rand() % 800;
@@ -85,6 +90,8 @@ void Player::action_result(std::string ret)
       char c;
       std::cin >> c;
     }
+
+    // Get
     else if (2 == req_type)
     {
       char block_code = ret.c_str()[0];
@@ -107,44 +114,80 @@ void Player::action_result(std::string ret)
   req_params.clear();
 }
 
+std::string Player::move(int dx, int dy)
+{
+  std::stirng req;
+
+  req = "move{";
+  req += std::to_string(dx) + ";" + std::to_string(dy) + "}";
+
+  req_type = 0;
+  req_params.push_back(dx);
+  req_params.push_back(dy);
+
+  return req;
+}
+
+std::string Player::put(char bc, int dx, int dy)
+{
+  std::stirng req;
+
+  req = "put{" + std::to_string(bc) + ";" + std::to_string(dx)
+    + ";" + std::to_string(dy) + "}";
+
+  req_type = 1;
+  req_params.push_back((int)block_code);
+  req_params.push_back(dx);
+  req_params.push_back(dy);
+
+  return req;
+}
+
+std::string Player::get(int dx, int dy)
+{
+  std::stirng req;
+
+  req = "get{" + std::to_string(dx) + ";" + std::to_string(dy) + "}";
+
+  req_type = 2;
+  req_params.push_back(dx);
+  req_params.push_back(dy);
+
+  return req;
+}
+
+std::string Player::msg_broadcast(std::string msg)
+{
+  std::stirng req;
+
+  req = "mb{\"" + msg + "\"}";
+
+  return req;
+}
+
+std::string Player::msg(std::string user_ip, std::string msg)
+{
+  std::stirng req;
+
+  req = "ms{\"" + user_ip + "\",\"" + msg + "\"}";
+
+  return req;
+}
+
 std::string Player::get_action(void)
 {
   std::string req;
 
-  if (pos_x == dst.first && pos_y == dst.second)
-  {
-    int dx = 0;
-    int dy = 0;
+  // std::pair<int, int> m = get_move();
+  // req = move(m.first, m.second);
 
-    req = "get{" + std::to_string(dx) + ";" + std::to_string(dy) + "}";
+  // req = put((char)0, 0, 0);
 
-    req_type = 2;
-    req_params.push_back(dx);
-    req_params.push_back(dy);
+  // req = get(0, 0);
 
-    // char block_code = 1;
-    // int dx = 0;
-    // int dy = 0;
+  // req = msg_broadcast("Hello!");
 
-    // req = "put{" + std::to_string(block_code) + ";" + std::to_string(dx)
-    //   + ";" + std::to_string(dy) + "}";
-
-    // req_type = 1;
-    // req_params.push_back((int)block_code);
-    // req_params.push_back(dx);
-    // req_params.push_back(dy);
-  }
-  else
-  {
-    std::pair<int, int> m = get_move();
-
-    req = "move{";
-    req += std::to_string(m.first) + ";" + std::to_string(m.second) + "}";
-
-    req_type = 0;
-    req_params.push_back(m.first);
-    req_params.push_back(m.second);
-  }
+  // req = msg("128.0.0.1:8088", "Hello!");
 
   return req;
 }
