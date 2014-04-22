@@ -8,6 +8,8 @@
 
 # include <boost/asio.hpp>
 
+# include "Player.hpp"
+
 using boost::asio::ip::udp;
 
 enum {max_length = 1024};
@@ -20,8 +22,9 @@ namespace Clients
   class Client
   {
   protected:
-    std::string username;
-    std::string password;
+    // std::string username;
+    // std::string password;
+    Player p;
 
   protected:
     char* host;
