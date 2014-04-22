@@ -291,7 +291,7 @@ void Player::rcv_msg(std::string user_ip, std::string msg)
       }
     }
   }
-  else if (std::string::npos != msg.find("nood"))
+  else if (std::string::npos != msg.find("noob"))
   {
     int i;
     if (0 <= (i = friend_index(user_ip)))
