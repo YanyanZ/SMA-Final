@@ -7,6 +7,27 @@ bool Game::is_account_exist(std::string ip)
   return players.end() != players.find(ip);
 }
 
+void Game::sendmessage(std::string sender, std::string msg, udp::socket& sock)
+{
+  std::vector<std::string> res;
+  boost::split(res, sender, boost::is_any_of(":"));
+  udp::endpoint sender_endpoint(boost::asio::ip::address::from_string(res[0]),
+				atoi(res[1].c_str()));
+
+  sock.send_to(boost::asio::buffer(msg.c_str(), msg.size()), sender_endpoint);
+}
+
+void Game::broadcast(std::string from, std::string msg)
+{
+  udp::socket sock(io_service, udp::endpoint(udp::v4(), port + 1));
+  for (std::map<std::string, Player*>::iterator it = players.begin(); it != players.end(); it++)
+    {
+      std::stringstream newmsg;
+      newmsg << "bo{\"" << from << "\";\"" << it->second->user_name << "\"}"; 
+      sendmessage(it->first, newmsg.str(), sock);
+    }
+}
+
 int Game::parse_request(std::string& line, std::string& ip)
 {
   std::string::const_iterator iter = line.begin();

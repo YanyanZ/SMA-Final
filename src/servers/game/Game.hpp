@@ -24,6 +24,7 @@
 # include <boost/spirit/include/phoenix_object.hpp>
 # include <boost/fusion/include/adapt_struct.hpp>
 # include <boost/fusion/include/io.hpp>
+# include <boost/algorithm/string.hpp>
 
 # include "../parsers/Parser.hpp"
 # include "Player.hpp"
@@ -114,6 +115,10 @@ namespace Servers
      * \return true if the accound is found, false otherwise
      */
     bool is_account_exist(std::string ip);
+
+  private:
+    void sendmessage(std::string sender, std::string msg, udp::socket& sock);
+    void broadcast(std::string from, std::string msg);
 
   private:
     /*!
