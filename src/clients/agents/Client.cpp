@@ -11,6 +11,8 @@ Client::Client(std::string u, std::string ps, char* h, char* p, boost::asio::io_
     fov[i].resize(16);
 
   endpoint = *resolver.resolve({udp::v4(), host, port});
+
+  std::cout << h << " "  << p << std::endl;
 }
 
 Client::~Client(void)

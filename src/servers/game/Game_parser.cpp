@@ -7,7 +7,29 @@ bool Game::is_account_exist(std::string ip)
   return players.end() != players.find(ip);
 }
 
-int Game::parse_request(std::string& line, std::string& ip)
+void Game::sendmessage(std::string sender, std::string msg, udp::socket& sock)
+{
+  std::vector<std::string> res;
+  boost::split(res, sender, boost::is_any_of(":"));
+  udp::endpoint sender_endpoint(boost::asio::ip::address::from_string(res[0]),
+				atoi(res[1].c_str()));
+
+  sock.send_to(boost::asio::buffer(msg.c_str(), msg.size()), sender_endpoint);
+}
+
+void Game::broadcast(std::string from, std::string msg)
+{
+  udp::socket sock(io_service, udp::endpoint(udp::v4(), port + 1));
+  std::cout << "> Broadcast: " << msg << std::endl;
+  for (std::map<std::string, Player*>::iterator it = players.begin(); it != players.end(); it++)
+    {
+      std::stringstream newmsg;
+      newmsg << "bo{\"" << from << "\";\"" << it->second->user_name << "\"}"; 
+      sendmessage(it->first, newmsg.str(), sock);
+    }
+}
+
+int Game::parse_request(std::string& line, std::string& ip, udp::socket& sock)
 {
   std::string::const_iterator iter = line.begin();
   std::string::const_iterator end = line.end();
@@ -25,6 +47,16 @@ int Game::parse_request(std::string& line, std::string& ip)
       return -1;
     }
   }
+  else if (phrase_parse(iter, end, bg, space, broad) && iter == end)
+    {
+      broadcast(ip, broad.msg);
+      return -2;
+      }
+  else if (phrase_parse(iter, end, sg, space, send) && iter == end)
+    {
+      sendmessage(send.sender, send.msg, sock);
+      return -2;
+      }
   else if (phrase_parse(iter, end, mg, space, mv) && iter == end)
   {
     return 1;
@@ -45,12 +77,12 @@ int Game::parse_request(std::string& line, std::string& ip)
   }
 }
 
-std::string Game::exec_request(std::string line, std::string ip, std::string port)
+std::string Game::exec_request(std::string line, std::string ip, std::string port, udp::socket& sock)
 {
   int ret = -1;
 
   ip += ":" + port;
-  if (0 > (ret = parse_request(line, ip)))
+  if (0 > (ret = parse_request(line, ip, sock)))
     return "fail";
 
   // connexion
@@ -105,6 +137,8 @@ std::string Game::exec_request(std::string line, std::string ip, std::string por
     ret += block_code;
     return ret;
   }
+  else if (-2 == ret)
+    return "";
 
   return "ok";
 }

@@ -24,6 +24,7 @@
 # include <boost/spirit/include/phoenix_object.hpp>
 # include <boost/fusion/include/adapt_struct.hpp>
 # include <boost/fusion/include/io.hpp>
+# include <boost/algorithm/string.hpp>
 
 # include "../parsers/Parser.hpp"
 # include "Player.hpp"
@@ -47,6 +48,8 @@ namespace Servers
   typedef Parser::request_move<iterator_type> MRequest_parser;
   typedef Parser::request_put<iterator_type> PRequest_parser;
   typedef Parser::request_get<iterator_type> GRequest_parser;
+  typedef Parser::request_broadcast<iterator_type> BRequest_parser;
+  typedef Parser::request_message<iterator_type> SRequest_parser;
 
   /*!
    * \class Class that containt all Game Server fonction and data
@@ -58,12 +61,16 @@ namespace Servers
     MRequest_parser mg; /*!< Grammar for Move Requests */
     PRequest_parser pg; /*!< Grammar for Put Requests */
     GRequest_parser gg; /*!< Grammar for Get Requests */
+    BRequest_parser bg; /*!< Grammar for Broadcast */
+    SRequest_parser sg;
 
   private:
     Parser::Connexion co; /*!< Connexion structure */
     Parser::Move mv; /*!< Move structure */
     Parser::Put pu; /*!< Put structure */
     Parser::Get ge; /*!< Put structure */
+    Parser::Broadcast broad;
+    Parser::Message send;
 
   private:
     const int max_nb_planets; /*!< Maximum number of planets in the game */
@@ -116,13 +123,17 @@ namespace Servers
     bool is_account_exist(std::string ip);
 
   private:
+    void sendmessage(std::string sender, std::string msg, udp::socket& sock);
+    void broadcast(std::string from, std::string msg);
+
+  private:
     /*!
      * \brief Parse the request send by the user
      * \param line : The string to parse
      * \return "fail" or "ok"
      */
-    int parse_request(std::string& line, std::string& ip);
-    std::string exec_request(std::string line, std::string ip, std::string port);
+    int parse_request(std::string& line, std::string& ip, udp::socket& sock);
+    std::string exec_request(std::string line, std::string ip, std::string port, udp::socket& sock);
 
   private:
     void update_users_page(void);

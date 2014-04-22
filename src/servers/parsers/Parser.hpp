@@ -63,9 +63,20 @@ namespace Parser
   struct ToServerMSG
   {
     std::string user_ip;
+  };
+
+  struct Message
+  {
+    std::string sender;
+    std::string msg;
+  };
+
+  struct Broadcast
+  {
     std::string msg;
   };
 }
+
 
 BOOST_FUSION_ADAPT_STRUCT(
   Parser::Connexion,
@@ -93,6 +104,7 @@ BOOST_FUSION_ADAPT_STRUCT(
   )
 
 BOOST_FUSION_ADAPT_STRUCT(
+<<<<<<< HEAD
   Parser::ToClientBoolReply,
   (int, r)
   )
@@ -119,6 +131,18 @@ BOOST_FUSION_ADAPT_STRUCT(
   (std::string, msg)
   )
 
+BOOST_FUSION_ADAPT_STRUCT(
+			  Parser::Message,
+			  (std::string, sender)
+			  (std::string, msg)
+			  )
+
+
+BOOST_FUSION_ADAPT_STRUCT(
+			  Parser::Broadcast,
+			  (std::string, msg)
+			  )
+
 namespace Parser
 {
   template <typename Iterator>
@@ -143,6 +167,51 @@ namespace Parser
     qi::rule<Iterator, std::string(), ascii::space_type> quoted_string;
     qi::rule<Iterator, Connexion(), ascii::space_type> start;
   };
+
+  template <typename Iterator>
+  struct request_message : qi::grammar<Iterator, Message(), ascii::space_type>
+  {
+    request_message() : request_message::base_type(start)
+    {
+      using qi::lit;
+      using qi::lexeme;
+      using ascii::char_;
+
+      quoted_string %= lexeme['"' >> +(char_ - '"') >> '"'];
+
+      start %= lit("ms")
+	>> '{'
+	>> quoted_string >> ';'
+	>> quoted_string
+	>> '}';
+    }
+
+    qi::rule<Iterator, std::string(), ascii::space_type> quoted_string;
+    qi::rule<Iterator, Message(), ascii::space_type> start;
+  };
+
+
+  template <typename Iterator>
+  struct request_broadcast : qi::grammar<Iterator, Broadcast(), ascii::space_type>
+  {
+    request_broadcast() : request_broadcast::base_type(start)
+    {
+      using qi::lit;
+      using qi::lexeme;
+      using ascii::char_;
+
+      quoted_string %= lexeme['"' >> +(char_ - '"') >> '"'];
+
+      start %= lit("mb")
+	>> '{'
+	>> quoted_string
+	>> '}';
+    }
+
+    qi::rule<Iterator, std::string(), ascii::space_type> quoted_string;
+    qi::rule<Iterator, Broadcast(), ascii::space_type> start;
+  };
+
 
   template <typename Iterator>
   struct request_move : qi::grammar<Iterator, Move(), ascii::space_type>
