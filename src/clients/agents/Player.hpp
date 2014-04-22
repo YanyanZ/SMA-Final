@@ -34,18 +34,18 @@ namespace Servers
      */
     ~Player(void);
 
-    bool is_user(std::string& u, std::string& p) const;
+    std::pair<int, int> get_move(void);
 
     int pos_x;
     int pos_y;
 
     int world_id;
 
-  public:
     std::string user_name;
+    std::string pwd;
 
   private:
-    std::string pwd;
+    int state;
   };
 }
 #endif

@@ -1,5 +1,5 @@
 set(SERVER_NAME gameServer)
-set(SOURCES Player.cpp Game.cpp Game_parser.cpp)
+set(SOURCES Player.cpp Game.cpp Game_parser.cpp Users_page.cpp)
 
 add_executable(${SERVER_NAME} ${SOURCES})
 

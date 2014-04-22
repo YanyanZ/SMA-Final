@@ -117,6 +117,9 @@ namespace Servers
     int parse_request(std::string& line, std::string& ip);
     std::string exec_request(std::string line, std::string ip, std::string port);
 
+  private:
+    void update_users_page(void);
+
   public:
     /*!
      * \brief Start Game Server

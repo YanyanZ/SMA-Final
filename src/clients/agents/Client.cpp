@@ -19,8 +19,8 @@ Client::~Client(void)
 
 bool Client::is_connected(void)
 {
-  std::string request = std::string("connexion{\"") + p.user_name +
-    std::string("\",\"") + p.pwd + std::string("\"}");
+  std::string request = std::string("co{\"") + p.user_name +
+    std::string("\";\"") + p.pwd + std::string("\"}");
 
   s.send_to(boost::asio::buffer(request.c_str(), request.size()), endpoint);
   size_t reply_length = s.receive_from(
@@ -44,16 +44,16 @@ void Client::run(void)
       memset(reply, 0, max_length);
 
       /* A changer */
-      //std::cout << "Enter message: ";
-      //char request[max_length];
-      //std::cin.getline(request, max_length);
+      // std::cout << "Enter message: ";
+      // std::string req;
+      // std::cin >> req;
       /* Fin changement */
 
       std::pair<int, int> m = p.get_move();
       std::string req("move{");
       req += std::to_string(m.first) + "," + std::to_string(m.second) + "}";
 
-      s.send_to(boost::asio::buffer(req.c_str(), req.size()), endpoint);
+      s.send_to(boost::asio::buffer(req, req.size()), endpoint);
 
       size_t reply_length = s.receive_from(
 	boost::asio::buffer(reply, max_length), sender_endpoint);
@@ -85,14 +85,14 @@ void Client::run(void)
 
 int main(int argc, char** argv)
 {
-  if (argc != 3)
+  if (argc != 5)
   {
     std::cerr << "Bad usage - ./exe host port" << std::endl;
     return -1;
   }
 
   boost::asio::io_service io;
-  Client* client = new Client("Agent1", "Agent1", argv[1], argv[2], io);
+  Client* client = new Client(argv[3], argv[4], argv[1], argv[2], io);
 
   client->run();
 
