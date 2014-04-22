@@ -51,18 +51,6 @@ namespace Parser
   };
 }
 
-BOOST_FUSION_ADAPT_STRUCT(
-			  Parser::Message,
-			  (std::string, sender)
-			  (std::string, msg)
-			  )
-
-
-BOOST_FUSION_ADAPT_STRUCT(
-			  Parser::Broadcast,
-			  (std::string, msg)
-			  )
-
 
 BOOST_FUSION_ADAPT_STRUCT(
   Parser::Connexion,
@@ -88,6 +76,18 @@ BOOST_FUSION_ADAPT_STRUCT(
   (int, dx)
   (int, dy)
   )
+
+BOOST_FUSION_ADAPT_STRUCT(
+			  Parser::Message,
+			  (std::string, sender)
+			  (std::string, msg)
+			  )
+
+
+BOOST_FUSION_ADAPT_STRUCT(
+			  Parser::Broadcast,
+			  (std::string, msg)
+			  )
 
 namespace Parser
 {
@@ -119,7 +119,6 @@ namespace Parser
   {
     request_message() : request_message::base_type(start)
     {
-      using qi::int_;
       using qi::lit;
       using qi::lexeme;
       using ascii::char_;
@@ -132,18 +131,17 @@ namespace Parser
 	>> quoted_string
 	>> '}';
     }
-
+  
     qi::rule<Iterator, std::string(), ascii::space_type> quoted_string;
     qi::rule<Iterator, Message(), ascii::space_type> start;
   };
-
+  
 
   template <typename Iterator>
   struct request_broadcast : qi::grammar<Iterator, Broadcast(), ascii::space_type>
   {
     request_broadcast() : request_broadcast::base_type(start)
     {
-      using qi::int_;
       using qi::lit;
       using qi::lexeme;
       using ascii::char_;
