@@ -10,6 +10,7 @@
 
 # include <cstdlib>
 # include <iostream>
+# include <ctime>
 
 /*!
  * \brief Namespace that contains all servers
@@ -21,7 +22,6 @@ namespace Servers
    */
   class Player
   {
-
   public:
     /*!
      * \brief Constructor
@@ -34,7 +34,8 @@ namespace Servers
      */
     ~Player(void);
 
-    std::pair<int, int> get_move(void);
+    std::string get_action(void);
+    void action_result(bool res);
 
     int pos_x;
     int pos_y;
@@ -45,7 +46,13 @@ namespace Servers
     std::string pwd;
 
   private:
-    int state;
+    // int state;
+    std::pair<int, int> dst;
+
+    int req_type;
+    std::vector<int> req_params;
+
+    std::pair<int, int> get_move(void);
   };
 }
 #endif

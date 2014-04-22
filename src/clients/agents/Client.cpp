@@ -49,9 +49,11 @@ void Client::run(void)
       // std::cin >> req;
       /* Fin changement */
 
-      std::pair<int, int> m = p.get_move();
-      std::string req("move{");
-      req += std::to_string(m.first) + ";" + std::to_string(m.second) + "}";
+      // std::pair<int, int> m = p.get_move();
+      // std::string req("move{");
+      // req += std::to_string(m.first) + ";" + std::to_string(m.second) + "}";
+
+      std::string req(p.get_action());
 
       s.send_to(boost::asio::buffer(req, req.size()), endpoint);
 
@@ -59,14 +61,16 @@ void Client::run(void)
 
       std::string reply_str(reply);
       std::cout << "Reply is: " << reply_str << std::endl;
-      if (reply_str.compare("ok") == 0)
-      {
-        p.pos_x += m.first;
-        p.pos_y += m.second;
-        std::cout << "New pos: x: " << p.pos_x << " y: " << p.pos_y << std::endl;
-      }
-      else
-        std::cout << "Pos is still: x: " << p.pos_x << " y: " << p.pos_y << std::endl;
+      p.action_result(0 == reply_str.compare("ok"));
+      // if (reply_str.compare("ok") == 0)
+      // {
+      //   p.action_result(true);
+        // p.pos_x += m.first;
+        // p.pos_y += m.second;
+        // std::cout << "New pos: x: " << p.pos_x << " y: " << p.pos_y << std::endl;
+      // }
+      // else
+      //   std::cout << "Pos is still: x: " << p.pos_x << " y: " << p.pos_y << std::endl;
     /* A changer */
       // std::cout << "Reply is: ";
       // std::cout.write(reply, reply_length);

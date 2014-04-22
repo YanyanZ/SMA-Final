@@ -25,6 +25,13 @@ namespace Parser
     int x;
     int y;
   };
+
+  struct Add
+  {
+    char block_code;
+    int dx;
+    int dy;
+  };
 }
 
 BOOST_FUSION_ADAPT_STRUCT(
@@ -37,6 +44,13 @@ BOOST_FUSION_ADAPT_STRUCT(
   Parser::Move,
   (int, x)
   (int, y)
+  )
+
+BOOST_FUSION_ADAPT_STRUCT(
+  Parser::Add,
+  (char, block_code)
+  (int, dx)
+  (int, dy)
   )
 
 namespace Parser
@@ -79,6 +93,24 @@ namespace Parser
     }
 
     qi::rule<Iterator, Move(), ascii::space_type> start;
+  };
+
+  template <typename Iterator>
+  struct request_add : qi::grammar<Iterator, Add(), ascii::space_type>
+  {
+    request_add() : request_add::base_type(start)
+    {
+      using qi::int_;
+      using ascii::char_;
+      using qi::lit;
+
+      start %= lit("add")
+  >> '{'
+  >> char_ >> ";" >> int_ >> ';' >> int_
+  >> '}';
+    }
+
+    qi::rule<Iterator, Add(), ascii::space_type> start;
   };
 }
 
