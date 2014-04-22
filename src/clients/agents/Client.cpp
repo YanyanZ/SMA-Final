@@ -45,9 +45,10 @@ int Client::parse(std::string line)
   }
   else if (phrase_parse(iter, end, sg, space, send) && iter == end)
     {
-      std::cout << send.msg << std::endl;
-      send.msg = "";
-      send.sender = "";
+      p.rcv_message(send.sender, send.msg);
+      // std::cout << send.msg << std::endl;
+      // send.msg = "";
+      // send.sender = "";
       return 0;
     }
   /*  else if (phrase_parse(iter, end, fovg, space, fov) && iter == end)
@@ -68,10 +69,10 @@ void Client::run(void)
       // std::string req("move{");
       // req += std::to_string(m.first) + ";" + std::to_string(m.second) + "}";
 
-      //std::string req(p.get_action());
+      std::string req(p.get_action());
 
       //      std::string req = "mb{\"Je fais un test\"}";
-      std::string req = "rfov{400;400}";
+      // std::string req = "rfov{400;400}";
 
       s.send_to(boost::asio::buffer(req, req.size()), endpoint);
 
